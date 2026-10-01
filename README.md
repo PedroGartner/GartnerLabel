@@ -1,5 +1,7 @@
 # Gartner Hover Card
 
+![Gartner Hover Card](card.png)
+
 Rest the mouse on a node in Nuke's Node Graph and a small card shows what you
 need to know about it, without opening anything.
 
