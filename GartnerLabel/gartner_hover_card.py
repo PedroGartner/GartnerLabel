@@ -183,6 +183,15 @@ _SKIP_KNOBS = {
     "useLifetime", "icon", "window", "disable", "file", "proxy", "selectable",
     "process_mask", "z_order", "bdwidth", "bdheight", "appearance", "border_width",
 }
+# knobs Nuke fills in by itself (e.g. when a Read loads a file), per class
+_AUTO_KNOBS = {
+    "Read": {"format", "first", "last", "origfirst", "origlast", "origset",
+             "version", "file_type", "colorspace", "frame_mode", "frame"},
+    "DeepRead": {"format", "first", "last", "origfirst", "origlast", "origset",
+                 "version", "file_type"},
+    "Write": {"file_type", "colorspace", "version"},
+    "DeepWrite": {"file_type", "version"},
+}
 _SKIP_CLASSES = {"Tab_Knob", "Text_Knob", "Obsolete_Knob", "PyScript_Knob",
                  "Help_Knob", "Link_Knob", "PyCustom_Knob", "Script_Knob"}
 
@@ -216,8 +225,9 @@ def _knob_value(k):
 
 def _changed_knobs(n):
     out = []
+    auto = _AUTO_KNOBS.get(n.Class(), ())
     for name, k in n.knobs().items():
-        if name in _SKIP_KNOBS or name.startswith(("gl_", "_")):
+        if name in _SKIP_KNOBS or name in auto or name.startswith(("gl_", "_")):
             continue
         try:
             if k.Class() in _SKIP_CLASSES or not k.notDefault():
